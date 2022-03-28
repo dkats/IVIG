@@ -273,8 +273,8 @@ table input[type="text"] {
 
 
 
-@media only screen and (max-width: 600px) {
-	body {
+@media only screen and (max-width: 900px) {
+	body, td, th {
 		font-size: 24pt;
 	}
 
