@@ -274,6 +274,10 @@ table input[type="text"] {
 
 
 @media only screen and (max-width: 600px) {
+	body {
+		font-size: 24pt;
+	}
+
 	header {
 		font-size: 24pt;
 	}
@@ -289,8 +293,5 @@ table input[type="text"] {
 	header ul.menu li {
 		width: 100%;
 	}
-
-	td,th {
-		font-size: 11.5pt;
 }
 
