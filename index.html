@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>IVIG Calculator</title>
+<link rel="stylesheet" type="text/css" href="css/ivig.css">
+<meta name="author" content="Daniel J. Kats">
+<meta name="keywords" content="intravenous immunoglobulin">
+<script type="text/javascript" src="js/footer.js"></script>
+<script type="text/javascript" src="js/header.js"></script>
+</head>
+<body>
+<script>header();</script>
+<script type="text/javascript">document.getElementById("header_home").className = "active";</script>
+<article>
+
+	<p class="center">This website is meant to help <u>double-check</u> IVIG pump settings according to the <a href="https://hospitalpolicies.ellucid.com/documents/view/20630">MGH policy</a>. We recommend printing the table out and taping it to the pump, so that you don't need to come back to the computer.<br /><span class="warning"><strong>Please do <em>not</em> rely on this website for the initial calculations; only use it for checking your work.</span></strong></p>
+
+	<div class="center">
+		<table id="input">
+			<tr><td><strong>Patient weight: </strong></td><td><input type="text" inputmode="decimal" id="wt" onkeyup="refresh('weight');"> kg</td></tr>
+		</table>
+	</div>
+
+	<div class="center">
+		<table id="output">
+			<tr><th>Time range (h:mm)</th><th class="out_stime">Start time</th><th class="out_etime">End time</th><th>Infusion rate (mL/hr)</th><th>Volume to be infused (mL)</th></tr>
+			<tr><td>0:00&ndash;0:30</td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate1"></td><td id="vol1"></td></tr>
+			<tr><td>0:30&ndash;1:00</td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate2"></td><td id="vol2"></td></tr>
+			<tr><td>1:00&ndash;1:30</td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate3"></td><td id="vol3"></td></tr>
+			<tr><td>1:30&ndash;2:00</td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate4"></td><td id="vol4"></td></tr>
+			<tr><td>2:00&ndash;2:30</td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate5"></td><td id="vol5"></td></tr>
+			<tr><td>2:30&ndash;3:00</td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate6"></td><td id="vol6"></td></tr>
+			<tr><td>3:00&ndash;completion</td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate7"></td><td id="vol7"></td></tr>
+		</table>
+	</div>
+
+	<script type="text/javascript" src="js/ivig.js"></script>
+
+</article>
+</body>
+</html>
