@@ -97,6 +97,7 @@ a {
 
 .warning {
 	color: red;
+	font-weight: bold;
 }
 
 div {
@@ -221,6 +222,16 @@ table input[type="text"] {
 	display: none;
 }
 
+#premed p {
+	margin-top: 24pt;
+	margin-bottom: 6pt;
+}
+
+#premed ul {
+	margin-top: 0pt;
+	list-style-type: none;
+}
+
 
 
 @media print{
@@ -254,6 +265,7 @@ table input[type="text"] {
 
 	#output th {
 		color: black;
+		background-color: white;
 		border-bottom: 2px solid black;
 	}
 

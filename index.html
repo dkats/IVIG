@@ -13,11 +13,13 @@
 <script type="text/javascript">document.getElementById("header_home").className = "active";</script>
 <article>
 
-	<p class="center">This website is meant to help <u>double-check</u> IVIG pump settings according to the <a href="https://hospitalpolicies.ellucid.com/documents/view/20630">MGH policy</a>. We recommend printing the table out and taping it to the pump, so that you don't need to come back to the computer.<br /><span class="warning"><strong>Please do <em>not</em> rely on this website for the initial calculations; only use it for checking your work.</span></strong></p>
+	<p class="center">This website is meant to help <u>double-check</u> IVIG pump settings according to the <a href="https://hospitalpolicies.ellucid.com/documents/view/20630">MGH policy</a>. We recommend printing the table out and taping it to the pump, so that you don't need to come back to the computer.<br /><span class="warning">Please do <em>not</em> rely on this website for the initial calculations; only use it for checking your work.</span></p>
 
 	<div class="center">
 		<table id="input">
 			<tr><td><strong>Patient weight: </strong></td><td><input type="text" inputmode="decimal" id="wt" onkeyup="refresh('weight');"> kg</td></tr>
+			<tr><td><strong>IVIG dose: </strong></td><td><input type="text" inputmode="decimal" id="dose_gkg" onkeyup="refresh('dose');"> g/kg</td></tr>
+			<tr><td colspan="2" id="dose_warning" class="warning"></td></tr>
 		</table>
 	</div>
 
@@ -32,6 +34,15 @@
 			<tr><td>2:30&ndash;3:00</td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate6"></td><td id="vol6"></td></tr>
 			<tr><td>3:00&ndash;completion</td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate7"></td><td id="vol7"></td></tr>
 		</table>
+	</div>
+
+	<div class="center" id="premed">
+		<p><strong>Suggested pre-medications:</strong></p>
+		<ul>
+			<li>Acetaminophen (Tylenol/Ofirmev): 15 mg/kg (max 1,000 mg)<span id="premed_acetaminophen"></span></li>
+			<li>Diphenhydramine (Benadryl): 1.25 mg/kg (max 50 mg)<span id="premed_diphenhydramine"></span></li>
+			<li>Methylprednisolone (Solu-Medrol): 2 mg/kg (max 40 mg)<span id="premed_methylpred"></span></li>
+		</ul>
 	</div>
 
 	<script type="text/javascript" src="js/ivig.js"></script>

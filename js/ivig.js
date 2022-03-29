@@ -33,6 +33,11 @@ var vol4_id = "vol4";
 var vol5_id = "vol5";
 var vol6_id = "vol6";
 var vol7_id = "vol7";
+var dose_gkg_id = "dose_gkg";
+var dose_warning_id = "dose_warning";
+var premed_acetaminophen_id = "premed_acetaminophen";
+var premed_diphenhydramine_id = "premed_diphenhydramine";
+var premed_methylpred_id = "premed_methylpred";
 
 var wt_el = document.getElementById(wt_id);
 var rate1_el = document.getElementById(rate1_id);
@@ -51,14 +56,22 @@ var vol5_el = document.getElementById(vol5_id);
 var vol6_el = document.getElementById(vol6_id);
 var vol7_el = document.getElementById(vol7_id);
 var vols = [vol1_el, vol2_el, vol3_el, vol4_el, vol5_el, vol6_el, vol7_el];
+var dose_gkg_el = document.getElementById(dose_gkg_id);
+var dose_warning_el = document.getElementById(dose_warning_id);
+var premed_acetaminophen_el = document.getElementById(premed_acetaminophen_id);
+var premed_diphenhydramine_el = document.getElementById(premed_diphenhydramine_id);
+var premed_methylpred_el = document.getElementById(premed_methylpred_id);
 
 var wt = NaN;
+var dose_gkg = NaN;
 
 function refresh(listener) {
 
 	// Get updated values
 	validate(wt_el.id);
 	wt = parseFloat(wt_el.value);
+	validate(dose_gkg_el.id);
+	dose_gkg = parseFloat(dose_gkg_el.value);
 
 	if(!isNaN(wt) && wt != "" && wt > 0) {
 		var temp = NaN;
@@ -71,10 +84,22 @@ function refresh(listener) {
 		temp = round(2 * wt, 1);
 		rates[6].innerHTML = temp;
 		vols[6].innerHTML = round(temp / 2, 1);
+
+		premed_acetaminophen_el.innerHTML = " = " + Math.min(round(15 * wt, 1), 1000) + " mg";
+		premed_diphenhydramine_el.innerHTML = " = " + Math.min(round(1.25 * wt, 1), 50) + " mg";
+		premed_methylpred_el.innerHTML = " = " + Math.min(round(2 * wt, 1), 40) + " mg";
 	} else {
 		for(var i = 0; i < rates.length; i++) {
 			rates[i].innerHTML = "";
 			vols[i].innerHTML = "";
 		}
+		premed_acetaminophen_el.innerHTML = "";
+		premed_diphenhydramine_el.innerHTML = "";
+		premed_methylpred_el.innerHTML = "";
+	}
+
+	dose_warning_el.innerHTML = "";
+	if(dose_gkg * wt > 100) {
+		dose_warning_el.innerHTML = "WARNING: the dose of " + round(dose_gkg * wt, 1) + "g is " + round(dose_gkg * wt - 100, 1) + "g above the recommended maximum of 100g";
 	}
 }
