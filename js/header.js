@@ -8,6 +8,7 @@ function header(level = 0) {
 	document.write('<header>');
 	document.write('<ul class="menu">');
 	document.write('	<li class="homeclick" onclick="window.open(\'' + dir + 'index.html\',\'_self\')" id="header_home">IVIG Calculator</li>');
+	document.write('	<li style="float:right;" onclick="window.print();">Print</li>');
 	document.write('</ul>');
 	document.write('</header>');
 }
