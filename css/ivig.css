@@ -252,6 +252,7 @@ table input[type="text"] {
 
 	a {
 		color: black;
+		text-decoration: none;
 	}
 
 	.warning {
