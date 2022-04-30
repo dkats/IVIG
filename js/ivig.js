@@ -7,10 +7,15 @@ function round(num, decimals) {
 function validate(id) {
 	var input = document.getElementById(id).value;
 	var out = '';
+	var decimal = false;
 	for(let i = 0; i < input.length; i++) {
 		var curr_char = input[i];
-		if((curr_char >= '0' && curr_char <= '9') || curr_char <= '.') {
+		if((curr_char >= '0' && curr_char <= '9')) {
 			out += curr_char;
+		// Only allow a decimal point if there are no preceding decimal points
+		} else if(curr_char <= '.' && !decimal) {
+			out += curr_char;
+			decimal = true;
 		}
 	}
 
