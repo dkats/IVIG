@@ -36,7 +36,20 @@ var vol7_id = "vol7";
 var dose_gkg_id = "dose_gkg";
 var dose_warning_id = "dose_warning";
 var conc_id = "conc";
-var end_time_id = "end_time";
+var end1_id = "end1";
+var end2_id = "end2";
+var end3_id = "end3";
+var end4_id = "end4";
+var end5_id = "end5";
+var end6_id = "end6";
+var end7_id = "end7";
+var row1_id = "row1";
+var row2_id = "row2";
+var row3_id = "row3";
+var row4_id = "row4";
+var row5_id = "row5";
+var row6_id = "row6";
+var row7_id = "row7";
 var premed_acetaminophen_id = "premed_acetaminophen";
 var premed_diphenhydramine_id = "premed_diphenhydramine";
 var premed_methylpred_id = "premed_methylpred";
@@ -61,7 +74,22 @@ var vols = [vol1_el, vol2_el, vol3_el, vol4_el, vol5_el, vol6_el, vol7_el];
 var dose_gkg_el = document.getElementById(dose_gkg_id);
 var dose_warning_el = document.getElementById(dose_warning_id);
 var conc_el = document.getElementById(conc_id);
-var end_time_el = document.getElementById(end_time_id);
+var end1_el = document.getElementById(end1_id);
+var end2_el = document.getElementById(end2_id);
+var end3_el = document.getElementById(end3_id);
+var end4_el = document.getElementById(end4_id);
+var end5_el = document.getElementById(end5_id);
+var end6_el = document.getElementById(end6_id);
+var end7_el = document.getElementById(end7_id);
+var ends = [end1_el, end2_el, end3_el, end4_el, end5_el, end6_el, end7_el];
+var row1_el = document.getElementById(row1_id);
+var row2_el = document.getElementById(row2_id);
+var row3_el = document.getElementById(row3_id);
+var row4_el = document.getElementById(row4_id);
+var row5_el = document.getElementById(row5_id);
+var row6_el = document.getElementById(row6_id);
+var row7_el = document.getElementById(row7_id);
+var rows = [row1_el, row2_el, row3_el, row4_el, row5_el, row6_el, row7_el];
 var premed_acetaminophen_el = document.getElementById(premed_acetaminophen_id);
 var premed_diphenhydramine_el = document.getElementById(premed_diphenhydramine_id);
 var premed_methylpred_el = document.getElementById(premed_methylpred_id);
@@ -80,43 +108,89 @@ function refresh(listener) {
 	validate(conc_el.id);
 	conc = parseFloat(conc_el.value);
 
+	// Show all rows
+	for(var i = 0; i < rows.length; i++) {
+		rows[i].style.display = "";
+	}
+
 	// If weight is valid, calculate the infusion rates
 	if(!isNaN(wt) && wt != "" && wt > 0) {
-		var temp = NaN;
-		var vol_infused = 0;
-		for(var i = 0; i < rates.length-1; i++) {
-			temp = round(0.3 * (i+1) * wt, 1);
-			rates[i].innerHTML = temp;
-			vols[i].innerHTML = round(temp / 2, 2);
-			vol_infused += temp / 2;
+		// Calculate the total infusion duration
+		if((!isNaN(conc) && conc != "" && conc > 0) && (!isNaN(dose_gkg) && dose_gkg != "" && dose_gkg > 0)) {
+			var temp = NaN;
+			var dose_infused = 0;
+
+			var i = 0;
+			while(i < rates.length-1 && round(dose_infused, 2) < round(dose_gkg * wt, 2)) {
+				temp = round(0.3 * (i+1) * wt, 1);
+				rates[i].innerHTML = temp;
+
+				// If the current time frame does not achieve the desired total dose
+				if(round(dose_infused + temp * conc / 2, 2) < round(dose_gkg * wt, 2)) {
+					vols[i].innerHTML = round(temp / 2, 1);
+					dose_infused = round(dose_infused + temp * conc / 2, 2);
+					ends[i].innerHTML = Math.floor((i+1) * 0.5) + ":" + ((Math.round(((i+1) * 0.5) % 1 * 60) + "").length == 2 ? Math.round(((i+1) * 0.5) % 1 * 60) : "0" + Math.round(((i+1) * 0.5) % 1 * 60));
+
+				// If the current time frame achieves the desired total dose
+				} else {
+					vols[i].innerHTML = round((dose_gkg * wt - dose_infused) / conc, 1);
+
+					// Time left (unit: hours) at max rate of infusion (assuming max rate is 2 mL/kg/hr)
+					var time_left = i * 0.5 + vols[i].innerHTML / temp;
+					// Minutes left
+					var min_left = Math.round((time_left - Math.floor(time_left)) * 60);
+					ends[i].innerHTML = (Math.floor(time_left)) + ":" + ((min_left + "").length == 2 ? min_left : "0" + min_left);
+
+					dose_infused = round(dose_gkg * wt, 2);
+				}
+
+				i++;
+			}
+
+			// If the total desired dose has not yet been infused
+			if(round(dose_infused, 2) < round(dose_gkg * wt, 2)) {
+				// Max at 2 mL/kg/hr
+				temp = round(2 * wt, 1);
+				rates[6].innerHTML = temp;
+
+				// Time left (unit: hours) at max rate of infusion (assuming max rate is 2 mL/kg/hr)
+				var time_left = (dose_gkg * wt - dose_infused) / (conc * 2 * wt);
+				if(time_left > 0) {
+					// Minutes left
+					var min_left = Math.round((time_left - Math.floor(time_left)) * 60);
+					ends[6].innerHTML = (Math.floor(time_left) + 3) + ":" + ((min_left + "").length == 2 ? min_left : "0" + min_left);
+					vols[6].innerHTML = round(time_left * 2 * wt, 1);
+				} else {
+					ends[6].innerHTML = "completion";
+					vols[6].innerHTML = "0";
+				}
+			// Loop through and hide the rows that aren't required
+			} else {
+				while(i < rates.length) {
+					rows[i].style.display = "none";
+					i++;
+				}
+			}
+		// If total infusion duration cannot be calculated (concentration and dose are not defined)
+		} else {
+			var temp = NaN;
+			for(var i = 0; i < rates.length-1; i++) {
+				temp = round(0.3 * (i+1) * wt, 1);
+				rates[i].innerHTML = temp;
+				vols[i].innerHTML = round(temp / 2, 1);
+			}
+
+			// Max at 2 mL/kg/hr
+			temp = round(2 * wt, 1);
+			rates[6].innerHTML = temp;
+			vols[6].innerHTML = "";
+			ends[6].innerHTML = "completion";
 		}
-		// Max at 2 mL/kg/hr
-		temp = round(2 * wt, 1);
-		rates[6].innerHTML = temp;
 
 		// Calculate premedication doses
 		premed_acetaminophen_el.innerHTML = " = " + Math.min(round(15 * wt, 1), 1000) + " mg";
 		premed_diphenhydramine_el.innerHTML = " = " + Math.min(round(1.25 * wt, 1), 50) + " mg";
 		premed_methylpred_el.innerHTML = " = " + Math.min(round(2 * wt, 1), 40) + " mg";
-
-		// TODO: End early if full dose has been given
-		// Calculate the total infusion duration
-		if((!isNaN(conc) && conc != "" && conc > 0) && (!isNaN(dose_gkg) && dose_gkg != "" && dose_gkg > 0)) {
-			// Time left (unit: hours) at max rate of infusion (assuming max rate is 2 mL/kg/hr)
-			var time_left = round((dose_gkg * wt - vol_infused * conc) / (conc * 2 * wt), 1);
-			if(time_left > 0) {
-				// Minutes left
-				var min_left = Math.round((time_left - Math.floor(time_left)) * 60);
-				end_time_el.innerHTML = (Math.floor(time_left) + 3) + ":" + min_left;
-				vols[6].innerHTML = round(time_left * 2 * wt, 2);
-			} else {
-				end_time_el.innerHTML = "completion";
-				vols[6].innerHTML = "0";
-			}
-		} else {
-			end_time_el.innerHTML = "completion";
-			vols[6].innerHTML = "";
-		}
 
 	// If weight is not valid, clear all the output fields
 	} else {
