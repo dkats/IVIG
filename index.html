@@ -24,6 +24,7 @@
 			<tr><td><strong>Patient weight: </strong></td><td><input type="text" inputmode="decimal" id="wt" onkeyup="refresh('weight');"> kg</td></tr>
 			<tr><td><strong>IVIG dose: </strong></td><td><input type="text" inputmode="decimal" id="dose_gkg" onkeyup="refresh('dose');"> g/kg</td></tr>
 			<tr><td colspan="2" id="dose_warning" class="warning"></td></tr>
+			<tr><td><strong>IVIG concentration: </strong></td><td><input type="text" inputmode="decimal" id="conc" onkeyup="refresh('conc');" value="0.1"> g/mL</td></tr>
 		</table>
 	</div>
 
@@ -36,7 +37,7 @@
 			<tr><td>1:30&ndash;2:00</td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate4"></td><td id="vol4"></td></tr>
 			<tr><td>2:00&ndash;2:30</td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate5"></td><td id="vol5"></td></tr>
 			<tr><td>2:30&ndash;3:00</td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate6"></td><td id="vol6"></td></tr>
-			<tr><td>3:00&ndash;completion</td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate7"></td><td id="vol7"></td></tr>
+			<tr><td>3:00&ndash;<span id="end_time">completion</span></td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate7"></td><td id="vol7"></td></tr>
 		</table>
 	</div>
 
