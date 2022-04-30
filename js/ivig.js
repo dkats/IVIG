@@ -39,7 +39,10 @@ var vol5_id = "vol5";
 var vol6_id = "vol6";
 var vol7_id = "vol7";
 var dose_gkg_id = "dose_gkg";
+var dose_total_id = "dose_total";
+var dose_total_row_id = "dose_total_row";
 var dose_warning_id = "dose_warning";
+var dose_warning_id_row = "dose_warning_row";
 var conc_id = "conc";
 var end1_id = "end1";
 var end2_id = "end2";
@@ -77,7 +80,10 @@ var vol6_el = document.getElementById(vol6_id);
 var vol7_el = document.getElementById(vol7_id);
 var vols = [vol1_el, vol2_el, vol3_el, vol4_el, vol5_el, vol6_el, vol7_el];
 var dose_gkg_el = document.getElementById(dose_gkg_id);
+var dose_total_el = document.getElementById(dose_total_id);
+var dose_total_row_el = document.getElementById(dose_total_row_id);
 var dose_warning_el = document.getElementById(dose_warning_id);
+var dose_warning_row_el = document.getElementById(dose_warning_id_row);
 var conc_el = document.getElementById(conc_id);
 var end1_el = document.getElementById(end1_id);
 var end2_el = document.getElementById(end2_id);
@@ -118,12 +124,18 @@ function refresh(listener) {
 		rows[i].style.display = "";
 	}
 
+	// Reset total dose row
+	dose_total_el.innerHTML = "";
+	dose_total_row_el.style.display = "none";
+
 	// If weight is valid, calculate the infusion rates
 	if(!isNaN(wt) && wt != "" && wt > 0) {
 		// Calculate the total infusion duration
 		if((!isNaN(conc) && conc != "" && conc > 0) && (!isNaN(dose_gkg) && dose_gkg != "" && dose_gkg > 0)) {
 			var temp = NaN;
 			var dose_infused = 0;
+			dose_total_el.innerHTML = round(dose_gkg * wt, 2) + " g";
+			dose_total_row_el.style.display = "";
 
 			var i = 0;
 			while(i < rates.length-1 && round(dose_infused, 2) < round(dose_gkg * wt, 2)) {
@@ -212,5 +224,8 @@ function refresh(listener) {
 	dose_warning_el.innerHTML = "";
 	if(dose_gkg * wt > 100) {
 		dose_warning_el.innerHTML = "WARNING: the dose of " + round(dose_gkg * wt, 1) + "g is " + round(dose_gkg * wt - 100, 1) + "g above the recommended maximum of 100g";
+		dose_warning_row_el.style.display = "";
+	} else {
+		dose_warning_row_el.style.display = "none";
 	}
 }

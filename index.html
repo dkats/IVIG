@@ -23,7 +23,8 @@
 		<table id="input">
 			<tr><td><strong>Patient weight: </strong></td><td><input type="text" inputmode="decimal" id="wt" onkeyup="refresh('weight');"> kg</td></tr>
 			<tr><td><strong>IVIG dose: </strong></td><td><input type="text" inputmode="decimal" id="dose_gkg" onkeyup="refresh('dose');"> g/kg</td></tr>
-			<tr><td colspan="2" id="dose_warning" class="warning"></td></tr>
+			<tr id="dose_total_row" style="display: none;"><td><strong>Total IVIG dose: </strong></td><td><span id="dose_total"></span></td></tr>
+			<tr id="dose_warning_row" style="display: none;"><td colspan="2" id="dose_warning" class="warning"></td></tr>
 			<tr><td><strong>IVIG concentration: </strong></td><td><input type="text" inputmode="decimal" id="conc" onkeyup="refresh('conc');" value="0.1"> g/mL</td></tr>
 		</table>
 	</div>
