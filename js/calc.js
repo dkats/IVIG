@@ -110,6 +110,8 @@ var dose_gkg = NaN;
 var conc = 0.1;			// g/mL
 var max_rate = 2;		// mg/kg/hr
 var step_time = 30;		// minutes
+var step_rate = 0.3;
+var i_final = Math.floor(max_rate/step_rate);
 
 function refresh(listener) {
 
@@ -141,7 +143,7 @@ function refresh(listener) {
 
 			var i = 0;
 			while(i < rates.length-1 && round(dose_infused, 2) < round(dose_gkg * wt, 2)) {
-				temp = round(0.3 * (i+1) * wt, 1);
+				temp = round(step_rate * (i+1) * wt, 1);
 				rates[i].innerHTML = temp;
 
 				// If the current time frame does not achieve the desired total dose
@@ -168,19 +170,20 @@ function refresh(listener) {
 
 			// If the total desired dose has not yet been infused
 			if(round(dose_infused, 2) < round(dose_gkg * wt, 2)) {
+
 				temp = round(max_rate * wt, 1);
-				rates[6].innerHTML = temp;
+				rates[i_final].innerHTML = temp;
 
 				// Time left (unit: hours) at max rate of infusion
 				var time_left = (dose_gkg * wt - dose_infused) / (conc * max_rate * wt);
 				if(time_left > 0) {
 					// Minutes left
 					var min_left = Math.round((time_left - Math.floor(time_left)) * 60);
-					ends[6].innerHTML = (Math.floor(time_left) + 3) + ":" + ((min_left + "").length == 2 ? min_left : "0" + min_left);
-					vols[6].innerHTML = round(time_left * max_rate * wt, 1);
+					ends[i_final].innerHTML = (Math.floor(time_left) + 3) + ":" + ((min_left + "").length == 2 ? min_left : "0" + min_left);
+					vols[i_final].innerHTML = round(time_left * max_rate * wt, 1);
 				} else {
-					ends[6].innerHTML = "completion";
-					vols[6].innerHTML = "0";
+					ends[i_final].innerHTML = "completion";
+					vols[i_final].innerHTML = "0";
 				}
 			// Loop through and hide the rows that aren't required
 			} else {
@@ -193,15 +196,15 @@ function refresh(listener) {
 		} else {
 			var temp = NaN;
 			for(var i = 0; i < rates.length-1; i++) {
-				temp = round(0.3 * (i+1) * wt, 1);
+				temp = round(step_rate * (i+1) * wt, 1);
 				rates[i].innerHTML = temp;
 				vols[i].innerHTML = round(temp / (60/step_time), 1);
 			}
 
 			temp = round(max_rate * wt, 1);
-			rates[6].innerHTML = temp;
-			vols[6].innerHTML = "";
-			ends[6].innerHTML = "completion";
+			rates[i_final].innerHTML = temp;
+			vols[i_final].innerHTML = "";
+			ends[i_final].innerHTML = "completion";
 		}
 
 		// Calculate premedication doses
