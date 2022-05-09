@@ -114,10 +114,20 @@ var step_rate = NaN;		// Increase in the rate of the infusion for step of the up
 var i_final = NaN;		// Number of steps of the uptitration prior to hitting the maximum infusion rate
 
 function ivig() {
+	// https://hospitalpolicies.ellucid.com/documents/view/20630
 	conc = 0.1;
 	max_rate = 2;
 	step_time = 30;
 	step_rate = 0.3;
+	i_final = Math.floor(max_rate/step_rate);
+}
+
+function rituximab() {
+	// https://hospitalpolicies.ellucid.com/documents/view/1771
+	conc = 1;
+	max_rate = 400;
+	step_time = 30;
+	step_rate = 0.5;
 	i_final = Math.floor(max_rate/step_rate);
 }
 
