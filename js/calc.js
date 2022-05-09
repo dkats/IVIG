@@ -107,11 +107,19 @@ var premed_methylpred_el = document.getElementById(premed_methylpred_id);
 
 var wt = NaN;
 var dose_gkg = NaN;
-var conc = 0.1;			// g/mL
-var max_rate = 2;		// mg/kg/hr
-var step_time = 30;		// minutes
-var step_rate = 0.3;
-var i_final = Math.floor(max_rate/step_rate);
+var conc = NaN;		// Concentration of the infusion medication (units: g/mL)
+var max_rate = NaN;		// Maximum rate of the infusion (units: mg/kg/hr)
+var step_time = NaN;		// Time per step of the infusion uptitration (units: minutes)
+var step_rate = NaN;		// Increase in the rate of the infusion for step of the uptitration (units: mL/kg/hr)
+var i_final = NaN;		// Number of steps of the uptitration prior to hitting the maximum infusion rate
+
+function ivig() {
+	conc = 0.1;
+	max_rate = 2;
+	step_time = 30;
+	step_rate = 0.3;
+	i_final = Math.floor(max_rate/step_rate);
+}
 
 function refresh(listener) {
 
@@ -142,7 +150,7 @@ function refresh(listener) {
 			dose_total_row_el.style.display = "";
 
 			var i = 0;
-			while(i < rates.length-1 && round(dose_infused, 2) < round(dose_gkg * wt, 2)) {
+			while(i < i_final && round(dose_infused, 2) < round(dose_gkg * wt, 2)) {
 				temp = round(step_rate * (i+1) * wt, 1);
 				rates[i].innerHTML = temp;
 
@@ -150,14 +158,14 @@ function refresh(listener) {
 				if(round(dose_infused + temp * conc / (60/step_time), 2) < round(dose_gkg * wt, 2)) {
 					vols[i].innerHTML = round(temp / (60/step_time), 1);
 					dose_infused = round(dose_infused + temp * conc / (60/step_time), 2);
-					ends[i].innerHTML = Math.floor((i+1) * 0.5) + ":" + ((Math.round(((i+1) * 0.5) % 1 * 60) + "").length == 2 ? Math.round(((i+1) * 0.5) % 1 * 60) : "0" + Math.round(((i+1) * 0.5) % 1 * 60));
+					ends[i].innerHTML = Math.floor((i+1) * (60/step_time)) + ":" + ((Math.round(((i+1) * (60/step_time)) % 1 * 60) + "").length == 2 ? Math.round(((i+1) * (60/step_time)) % 1 * 60) : "0" + Math.round(((i+1) * (60/step_time)) % 1 * 60));
 
 				// If the current time frame achieves the desired total dose
 				} else {
 					vols[i].innerHTML = round((dose_gkg * wt - dose_infused) / conc, 1);
 
 					// Time left (unit: hours) at max rate of infusion
-					var time_left = i * 0.5 + vols[i].innerHTML / temp;
+					var time_left = i * (60/step_time) + vols[i].innerHTML / temp;
 					// Minutes left
 					var min_left = Math.round((time_left - Math.floor(time_left)) * 60);
 					ends[i].innerHTML = (Math.floor(time_left)) + ":" + ((min_left + "").length == 2 ? min_left : "0" + min_left);
@@ -179,7 +187,7 @@ function refresh(listener) {
 				if(time_left > 0) {
 					// Minutes left
 					var min_left = Math.round((time_left - Math.floor(time_left)) * 60);
-					ends[i_final].innerHTML = (Math.floor(time_left) + 3) + ":" + ((min_left + "").length == 2 ? min_left : "0" + min_left);
+					ends[i_final].innerHTML = (Math.floor(time_left) + Math.floor((step_time * i_final)/60)) + ":" + ((min_left + "").length == 2 ? min_left : "0" + min_left);
 					vols[i_final].innerHTML = round(time_left * max_rate * wt, 1);
 				} else {
 					ends[i_final].innerHTML = "completion";
@@ -195,7 +203,7 @@ function refresh(listener) {
 		// If total infusion duration cannot be calculated (concentration and dose are not defined)
 		} else {
 			var temp = NaN;
-			for(var i = 0; i < rates.length-1; i++) {
+			for(var i = 0; i < i_final; i++) {
 				temp = round(step_rate * (i+1) * wt, 1);
 				rates[i].innerHTML = temp;
 				vols[i].innerHTML = round(temp / (60/step_time), 1);
