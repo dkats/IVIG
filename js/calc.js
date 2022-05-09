@@ -107,7 +107,9 @@ var premed_methylpred_el = document.getElementById(premed_methylpred_id);
 
 var wt = NaN;
 var dose_gkg = NaN;
-var conc = 0.1;
+var conc = 0.1;			// g/mL
+var max_rate = 2;		// mg/kg/hr
+var step_time = 30;		// minutes
 
 function refresh(listener) {
 
@@ -143,16 +145,16 @@ function refresh(listener) {
 				rates[i].innerHTML = temp;
 
 				// If the current time frame does not achieve the desired total dose
-				if(round(dose_infused + temp * conc / 2, 2) < round(dose_gkg * wt, 2)) {
-					vols[i].innerHTML = round(temp / 2, 1);
-					dose_infused = round(dose_infused + temp * conc / 2, 2);
+				if(round(dose_infused + temp * conc / (60/step_time), 2) < round(dose_gkg * wt, 2)) {
+					vols[i].innerHTML = round(temp / (60/step_time), 1);
+					dose_infused = round(dose_infused + temp * conc / (60/step_time), 2);
 					ends[i].innerHTML = Math.floor((i+1) * 0.5) + ":" + ((Math.round(((i+1) * 0.5) % 1 * 60) + "").length == 2 ? Math.round(((i+1) * 0.5) % 1 * 60) : "0" + Math.round(((i+1) * 0.5) % 1 * 60));
 
 				// If the current time frame achieves the desired total dose
 				} else {
 					vols[i].innerHTML = round((dose_gkg * wt - dose_infused) / conc, 1);
 
-					// Time left (unit: hours) at max rate of infusion (assuming max rate is 2 mL/kg/hr)
+					// Time left (unit: hours) at max rate of infusion
 					var time_left = i * 0.5 + vols[i].innerHTML / temp;
 					// Minutes left
 					var min_left = Math.round((time_left - Math.floor(time_left)) * 60);
@@ -166,17 +168,16 @@ function refresh(listener) {
 
 			// If the total desired dose has not yet been infused
 			if(round(dose_infused, 2) < round(dose_gkg * wt, 2)) {
-				// Max at 2 mL/kg/hr
-				temp = round(2 * wt, 1);
+				temp = round(max_rate * wt, 1);
 				rates[6].innerHTML = temp;
 
-				// Time left (unit: hours) at max rate of infusion (assuming max rate is 2 mL/kg/hr)
-				var time_left = (dose_gkg * wt - dose_infused) / (conc * 2 * wt);
+				// Time left (unit: hours) at max rate of infusion
+				var time_left = (dose_gkg * wt - dose_infused) / (conc * max_rate * wt);
 				if(time_left > 0) {
 					// Minutes left
 					var min_left = Math.round((time_left - Math.floor(time_left)) * 60);
 					ends[6].innerHTML = (Math.floor(time_left) + 3) + ":" + ((min_left + "").length == 2 ? min_left : "0" + min_left);
-					vols[6].innerHTML = round(time_left * 2 * wt, 1);
+					vols[6].innerHTML = round(time_left * max_rate * wt, 1);
 				} else {
 					ends[6].innerHTML = "completion";
 					vols[6].innerHTML = "0";
@@ -194,11 +195,10 @@ function refresh(listener) {
 			for(var i = 0; i < rates.length-1; i++) {
 				temp = round(0.3 * (i+1) * wt, 1);
 				rates[i].innerHTML = temp;
-				vols[i].innerHTML = round(temp / 2, 1);
+				vols[i].innerHTML = round(temp / (60/step_time), 1);
 			}
 
-			// Max at 2 mL/kg/hr
-			temp = round(2 * wt, 1);
+			temp = round(max_rate * wt, 1);
 			rates[6].innerHTML = temp;
 			vols[6].innerHTML = "";
 			ends[6].innerHTML = "completion";
