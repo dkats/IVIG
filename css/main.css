@@ -143,6 +143,15 @@ ul.menu li.noclick:hover {
 	cursor: default;
 }
 
+header ul.menu li.noclick {
+	font-variant: small-caps;
+	color: yellow;
+}
+
+header ul.menu li.noclick:hover {
+	color: yellow;
+}
+
 ul.menu li.homeclick:hover {
 	color: #000066;
 	background-color: #ffd86b;
@@ -168,9 +177,18 @@ article {
 	text-align: center;
 }
 
+table {
+	display: inline-block;
+}
+
+td,th {
+	padding: 6pt 12pt;
+}
+
 #input {
-	margin-top: 30px;
-	margin-bottom: 15px;
+	margin-top: 8pt;
+	margin-bottom: 12pt;
+	border-collapse: collapse;
 }
 
 #input td {
@@ -182,15 +200,15 @@ article {
 	text-align: right;
 }
 
-table {
-	display: inline-block;
+#dose_row_top td:not(:first-child) {
+	padding-top: 12pt;
 }
 
-td,th {
-	padding: 6pt 12pt;
+#dose_row_bottom td {
+	padding-bottom: 12pt;
 }
 
-table#output {
+#output {
 	border-collapse: collapse;
 	border: 2px solid #1282a4;
 }

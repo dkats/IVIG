@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>IVIG Calculator</title>
+<title>Infusion Calculator</title>
 <link rel="stylesheet" type="text/css" href="css/main.css">
 <meta name="author" content="Daniel J. Kats">
 <meta name="keywords" content="intravenous immunoglobulin">
@@ -10,35 +10,28 @@
 </head>
 <body>
 <script>header();</script>
-<script type="text/javascript">document.getElementById("header_home").className = "active";</script>
 <article>
 
+	<h1 class="center drug_name_upper"></h1>
+
 	<div class="center">
-		<p>This website is meant to help <u>double-check</u> IVIG pump settings according to the <a href="https://hospitalpolicies.ellucid.com/documents/view/20630">MGH policy</a>. We recommend <a href="#" onclick="window.print();">printing</a> the table out and taping it to the pump, so that you don't need to come back to the computer.</p>
-		<p>This website uses the following <a href="https://hospitalpolicies.ellucid.com/documents/view/20630">protocol</a>: Initial rate 0.3 mL/kg/hour for the first 30 minutes. May increase by 0.3 mL/kg/hour every 30 minutes to a maximum of 2 mL/kg/hour.</p>
+		<p>This website is meant to help <u>double-check</u> <span class="drug_name_lower"></span>pump settings according to the <a class="policy_link">MGH policy</a>. We recommend <a href="#" onclick="window.print();">printing</a> the table out and taping it to the pump, so that you don't need to come back to the computer.</p>
+		<p>This website uses the following <a class="policy_link">protocol</a><span id="protcol_summary"></span>.</p>
 		<p><span class="warning">Please do <em>not</em> rely on this website for the initial calculations; only use it for checking your work.</span></p>
 	</div>
 
 	<div class="center">
 		<table id="input">
 			<tr><td><strong>Patient weight: </strong></td><td><input type="text" inputmode="decimal" id="wt" onkeyup="refresh('weight');"> kg</td></tr>
-			<tr><td><strong>IVIG dose: </strong></td><td><input type="text" inputmode="decimal" id="dose_gkg" onkeyup="refresh('dose');"> g/kg</td></tr>
-			<tr id="dose_total_row" style="display: none;"><td><strong>Total IVIG dose: </strong></td><td><span id="dose_total"></span></td></tr>
+			<tr id="dose_row_top"><td rowspan="2"><strong><span class="drug_name_upper"></span>dose: </strong></td><td><input type="text" inputmode="decimal" id="dose_perkg" onkeyup="refresh('dose_perkg');"> <span id="dose_perkg_u"></span></td></tr>
+			<tr id="dose_row_bottom"><td style="text-align: left;"><input type="text" inputmode="decimal" id="dose_total" onkeyup="refresh('dose_total');"> <span id="dose_total_u"></span></td></tr>
 			<tr id="dose_warning_row" style="display: none;"><td colspan="2" id="dose_warning" class="warning"></td></tr>
-			<tr><td><strong>IVIG concentration: </strong></td><td><input type="text" inputmode="decimal" id="conc" onkeyup="refresh('conc');" value="0.1"> g/mL</td></tr>
+			<tr><td><strong><span class="drug_name_upper"></span> concentration: </strong></td><td><input type="text" inputmode="decimal" id="conc" onkeyup="refresh('conc');" value="0.1"> <span id="conc_u"></span></td></tr>
 		</table>
 	</div>
 
 	<div class="center">
 		<table id="output">
-			<tr><th>Time range (h:mm)</th><th class="out_stime">Start time</th><th class="out_etime">End time</th><th>Infusion rate (mL/hr)</th><th>Volume to be infused (mL)</th></tr>
-			<tr id="row1"><td>0:00&ndash;<span id="end1">0:30</span></td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate1"></td><td id="vol1"></td></tr>
-			<tr id="row2"><td>0:30&ndash;<span id="end2">1:00</span></td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate2"></td><td id="vol2"></td></tr>
-			<tr id="row3"><td>1:00&ndash;<span id="end3">1:30</span></td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate3"></td><td id="vol3"></td></tr>
-			<tr id="row4"><td>1:30&ndash;<span id="end4">2:00</span></td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate4"></td><td id="vol4"></td></tr>
-			<tr id="row5"><td>2:00&ndash;<span id="end5">2:30</span></td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate5"></td><td id="vol5"></td></tr>
-			<tr id="row6"><td>2:30&ndash;<span id="end6">3:00</span></td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate6"></td><td id="vol6"></td></tr>
-			<tr id="row7"><td>3:00&ndash;<span id="end7">completion</span></td><td class="out_stime">:</td><td class="out_etime">:</td><td id="rate7"></td><td id="vol7"></td></tr>
 		</table>
 	</div>
 
